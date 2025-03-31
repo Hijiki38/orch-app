@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-orchapp-dev-d64c2-authRole",
+      "UnauthRoleArn": "arn:aws:iam::839103533458:role/amplify-orchapp-dev-d64c2-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::839103533458:role/amplify-orchapp-dev-d64c2-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-orchapp-dev-d64c2-deployment",
+      "UnauthRoleName": "amplify-orchapp-dev-d64c2-unauthRole",
+      "StackName": "amplify-orchapp-dev-d64c2",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:839103533458:stack/amplify-orchapp-dev-d64c2/84468cf0-0e3f-11f0-b7b8-0eacca462481",
+      "AmplifyAppId": "d32g7e3mj6fon1"
+    }
+  }
+}
