@@ -10,6 +10,32 @@
       "StackName": "amplify-orchapp-dev-d64c2",
       "StackId": "arn:aws:cloudformation:ap-northeast-1:839103533458:stack/amplify-orchapp-dev-d64c2/84468cf0-0e3f-11f0-b7b8-0eacca462481",
       "AmplifyAppId": "d32g7e3mj6fon1"
+    },
+    "categories": {
+      "auth": {
+        "orchapp60d7190b": {}
+      }
+    }
+  },
+  "devorchapp": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-orchapp-devorchapp-04a98-authRole",
+      "UnauthRoleArn": "arn:aws:iam::839103533458:role/amplify-orchapp-devorchapp-04a98-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::839103533458:role/amplify-orchapp-devorchapp-04a98-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-orchapp-devorchapp-04a98-deployment",
+      "UnauthRoleName": "amplify-orchapp-devorchapp-04a98-unauthRole",
+      "StackName": "amplify-orchapp-devorchapp-04a98",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:839103533458:stack/amplify-orchapp-devorchapp-04a98/b866b850-0fcc-11f0-8256-0a9ed8247e0b",
+      "AmplifyAppId": "d32g7e3mj6fon1"
+    },
+    "categories": {
+      "auth": {
+        "orchapp60d7190b": {}
+      },
+      "storage": {
+        "s34d276035": {}
+      }
     }
   }
 }
