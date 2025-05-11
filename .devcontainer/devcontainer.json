@@ -1,0 +1,40 @@
+{
+  "name": "RN Expo Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "settings": {
+    "terminal.integrated.shell.linux": null,
+  },
+  "extensions": [
+    "visualstudioexptteam.vscodeintellicode",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "hookyqr.beautify",
+    "alefragnani.bookmarks",
+    "lacroixdavid1.vscode-format-context-menu",
+    "eamodio.gitlens",
+    "oderwat.indent-rainbow",
+    "ionutvmi.path-autocomplete",
+    "chrmarti.regex",
+    "humao.rest-client",
+    "wayou.vscode-icons-mac"
+],
+  // "forwardPorts": [19000, 19001, 19002],
+  // "workspaceFolder": "/workspace",
+  // "postCreateCommand": "npm install"
+}
+
+// {
+//   "name": "Expo Dev Container",
+//   "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
+//   "forwardPorts": [
+//     8081
+//   ],
+//   "runArgs": [
+//     "-p=8081:8081",
+//     "--env-file",
+//     ".devcontainer/.env"
+//   ]
+// }

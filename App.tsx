@@ -1,14 +1,16 @@
 // App.tsx
 
 import React from 'react';
-import { Button, View, StyleSheet } from 'react-native';
+import { Text, Button, View, StyleSheet } from 'react-native';
 import { Amplify } from 'aws-amplify';
 //import amplifyconfig from './src/amplifyconfiguration.json';
 import amplifyconfig from './src/aws-exports';
 import { uploadData } from 'aws-amplify/storage';
 import * as ImagePicker from 'expo-image-picker';
+import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { Buffer } from 'buffer';
+import FileList from './FileList';
 
 global.Buffer = Buffer; // very important
 
@@ -16,54 +18,81 @@ global.Buffer = Buffer; // very important
 Amplify.configure(amplifyconfig);
 export default function App() {
   const uploadImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      // mediaTypes: [ImagePicker.MediaType.Images],
-      allowsEditing: true,
-      quality: 1,
+    const res = await DocumentPicker.getDocumentAsync({
+      type: 'application/pdf',
+      copyToCacheDirectory: true, // true にすると、選択したファイルがキャッシュに保存される
+      multiple: false, // 複数選択を許可する場合は true にする
     });
 
-    if (!result.canceled) {
-      const uri = result.assets[0].uri;
-      const fileName = uri.split('/').pop()!;
-      const fileBuffer = await FileSystem.readAsStringAsync(uri, {
+    if (!res.canceled) {
+      const { uri, name } = res.assets[0];
+      // Base64文字列として読み込み
+      const base64 = await FileSystem.readAsStringAsync(uri, {
         encoding: FileSystem.EncodingType.Base64,
       });
+      const buffer = Buffer.from(base64, 'base64');
 
       try {
-        const res = await uploadData({
-          path: `public/uploads/${fileName}`,
-          data: Buffer.from(fileBuffer, 'base64'),
+        // uploadData でアップロード
+        const { result } = await uploadData({
+          path: `public/uploads/${name}`,
+          data: buffer,
           options: {
-            contentType: 'image/jpeg',
+            contentType: 'application/pdf',
             onProgress: (progress) => {
-              console.log('Uploading:', progress);
+              console.log('Uploading PDF:', progress);
             },
           },
-        }).result;
-
-        console.log('Upload succeeded:', res);
-        alert('Upload successful!');
+        });
+        console.log('Upload succeeded:', result);
+        alert('PDFアップロード成功！');
       } catch (err) {
         console.error('Upload failed:', err);
-        alert('Upload failed!');
+        alert('PDFアップロード失敗…');
       }
     }
   };
 
   return (
     <View style={styles.container}>
+      <Text style={{ fontSize: 20 }}>Amplify + Expo + React Native</Text>
       <Button title="画像を選んでアップロード" onPress={uploadImage} />
+      {/* S3 にアップロード済みファイルの一覧表示 */}
+      <View style={styles.listContainer}>
+        <FileList />
+      </View>
     </View>
   );
 }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     paddingTop: 40,
+//     backgroundColor: '#fff',
+//   },
+//   listContainer: {
+//     flex: 1,
+//     marginTop: 20,
+//   },
+// });
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#ffffff',
+    paddingTop: 100,
+  },
+  listContainer: {
+    flex: 1,
+    marginTop: 20,
   },
 });
+
+
 // export default function App() {
 //   return (
 //     <View style={styles.container}>
