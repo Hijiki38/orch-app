@@ -9,12 +9,11 @@ import {
   Linking,
   StyleSheet,
 } from 'react-native';
-// import Storage from '@aws-amplify/storage';
-import { list } from 'aws-amplify/storage';
+import { list, getUrl } from 'aws-amplify/storage';
 
 type S3Object = {
   key: string;
-  url: string;
+  url: URL;
 };
 
 export default function FileList() {
@@ -24,39 +23,27 @@ export default function FileList() {
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const result = await list({
+        const { items } = await list({
           path: 'public/uploads/',
-        })
-        console.log(result);  // { key: string, eTag: string, ... } の配列が返る
+          options: { listAll: true },
+        });
+
+        const withUrls = await Promise.all(
+          items.map(async ({ path }) => {
+            const { url } = await getUrl({ path });
+            return { key: path, url };
+          })
+        );
+        console.log('withUrls:', withUrls);
+        setFiles(withUrls);
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
-    };
-    
-    // const fetchFiles = async () => {
-    //   try {
-    //     // 1. "public/uploads/" 以下のオブジェクト一覧を取得
-    //     const listResult = await Storage.list('public/uploads/', {
-    //       level: 'public',
-    //     });
+      // try {
+    }
 
-    //     // 2. 各オブジェクトの署名付きURLを取得
-    //     const filePromises = listResult.map(async (obj) => {
-    //       const url = await Storage.get(obj.key, {
-    //         level: 'public',
-    //         expires: 300, // URL 有効期限：5分
-    //       });
-    //       return { key: obj.key, url } as S3Object;
-    //     });
-
-    //     const fileList = await Promise.all(filePromises);
-    //     setFiles(fileList);
-    //   } catch (err) {
-    //     console.error('Error listing files:', err);
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
 
     fetchFiles();
   }, []);
@@ -75,6 +62,8 @@ export default function FileList() {
         <Text>アップロードされたファイルはありません。</Text>
       </View>
     );
+  }else{
+    console.log('files:', files);
   }
 
   return (
@@ -84,10 +73,10 @@ export default function FileList() {
       renderItem={({ item }) => (
         <TouchableOpacity
           style={styles.item}
-          onPress={() => {
+          onPress={() => 
             // PDFも画像も、そのままブラウザ／ビューアで開く
-            Linking.openURL(item.url as string);
-          }}
+            Linking.openURL(item.url.toString())
+          }
         >
           <Text style={styles.text}>{item.key.split('/').pop()}</Text>
         </TouchableOpacity>
